@@ -175,17 +175,15 @@ drop procedure uspProductList;
 
 ```
 # B. Cursor
-  
-cursor
 
 ## Cách sử dụng Cursor  
 
-Corsor thường được dùng trong các Stored Procedure, Cursor mở và duyệt qua từng dòng dữ liệu mà nó chỉ tới.  
+Cursor thường được dùng trong các Stored Procedure, Cursor mở và duyệt qua từng dòng dữ liệu mà nó chỉ tới.  
 
 ## Khai báo và sử dụng  
 
 **Khai báo**  
- Trong SQL, tại các Stored Procedure, ta có thể dùng Cursor để duyệt qua dữ liệu. Ta hiểu Cursor là một tập hợp kết quả truy vấn (các hàng), với Corsor ta có thể duyệt qua từng hàng kết quả để thi hành những tác vụ phức tạp.  
+ Trong SQL, tại các Stored Procedure, ta có thể dùng Cursor để duyệt qua dữ liệu. Ta hiểu Cursor là một tập hợp kết quả truy vấn (các hàng), với Cursor ta có thể duyệt qua từng hàng kết quả để thi hành những tác vụ phức tạp.  
  Ở một thời điểm, Cursor có thể truy cập bởi một con trỏ đến một hàng của nó, bạn chỉ có thể dịch chuyển con trỏ từ dòng này sang dòng khác.  
 
 ```sql  
@@ -211,12 +209,12 @@ deallocate cursorProduct	--  Giải phóng tài nguyên
 
 ## Cách sử dụng Cursor
 
-Corsor thường được dùng trong các Stored Procedure, Cursor mở và duyệt qua từng dòng dữ liệu mà nó chỉ tới.
+Cursor thường được dùng trong các Stored Procedure, Cursor mở và duyệt qua từng dòng dữ liệu mà nó chỉ tới.
 
 ## Khai báo và sử dụng
 
 **Khai báo**  
-Trong SQL, tại các Stored Procedure, ta có thể dùng Cursor để duyệt qua dữ liệu. Ta hiểu Cursor là một tập hợp kết quả truy vấn (các hàng), với Corsor ta có thể duyệt qua từng hàng kết quả để thi hành những tác vụ phức tạp.  
+Trong SQL, tại các Stored Procedure, ta có thể dùng Cursor để duyệt qua dữ liệu. Ta hiểu Cursor là một tập hợp kết quả truy vấn (các hàng), với Cursor ta có thể duyệt qua từng hàng kết quả để thi hành những tác vụ phức tạp.  
 Ở một thời điểm, Cursor có thể truy cập bởi một con trỏ đến một hàng của nó, bạn chỉ có thể dịch chuyển con trỏ từ dòng này sang dòng khác.
 
 ```sql
@@ -349,4 +347,89 @@ begin
 	...
 end;
 
+```
+# Function 
+## Function là gì?
+
+#### Định nghĩa:
+
+Là một đối tượng trong cơ sở dữ liệu (CSDL) sử dụng trong các câu lệnh SQL, được biên dịch sẵn và lưu trong CSDL nhằm mục đích thực hiện xử lý nào đó như tính toán phức tạp và trả về kết quả là giá trị nào đó.
+
+#### Đặc điểm:
+
+-   Luôn trả về giá trị
+-   Gồm 2 loại: Function hệ thống và Function do người dùng tự định nghĩa
+-   Function người dùng tự định nghĩa gồm 2 loại:
+
+-   Scalar-valued: Trả về giá trị vô hướng của các kiểu dữ liệu T-SQL
+-   Table-valued: Trả về bảng, là kết quả của một hoặc nhiều lệnh
+
+## Cách định nghĩa Function
+
+### 1. Tạo Function trả về giá trị loại Scalar-valued
+```sql
+CREATE  FUNCTION  <Tên function>  ([@<tên tham số>  <kiểu dữ liệu>  [=  <giá trị mặc định>], …,[...]])  
+RETURNS  <kiểu dữ liệu> 
+[WITH ENCRYPTION]  
+[AS]  
+BEGIN  
+	[Thân của hàm]  
+RETURN  <Biểu thức giá trị đơn> 
+END
+```
+**Trong đó:**
+
+-   Tên function: Tên của hàm chúng ta sẽ tạo
+-   Tên tham số: Là các tham số Input cho hàm. Khai báo báo gồm tên của tham số (trước tên tham số sử dụng tiền tố @), kiểu dữ liệu của tham số, chúng ta có thể chỉ định giá trị mặc định cho tham số. Có thể chỉ định nhiều tham số đầu vào
+-   RETURNS: từ khóa này chỉ định kiểu dữ liệu hàm sẽ trả về. Kiểu dữ liệu phải được chỉ định kiểu độ dài dữ liệu. Ví dụ: varchar(100)
+-   WITH ENCRYPTION: Từ khóa chỉ định code của hàm sẽ được mã hóa trong bảng syscomments.
+-   AS: Từ khóa cho biết code của hàm bắt đầu.
+-   BEGIN: Đi cùng với END để tạo thành bao khối bao các câu lệnh trong thân hàm.
+-   RETURN: Từ khóa này sẽ gửi giá trị tới thủ tục gọi hàm.  **Một số lưu ý:**
+-   Tên function phải là duy nhất trong 1 CSDL. Function được tạo/định nghĩa trong CSDL nào thì chỉ sử dụng trong CSDL đó. Khác với Function có sẵn của SQL được truy cập ở bất cứ đâu.
+-   Danh sách tham số tối đa 1024 tham số.
+
+### 2. Tạo Function trả về giá trị loại Table-valued
+
+Function Table-valued có 2 loại:
+
+-   Hàm giá trị bảng đơn giản: Trả về bảng, là kết quả của một câu lệnh SELECT đơn
+-   Hàm giá trị bảng đa câu lệnh: Trả về bảng, là kết quả của nhiều câu lệnh
+
+#### a) Hàm giá trị bảng đơn giản
+```sql
+CREATE  FUNCTION  <Tên function>  ([@<tên tham số>  <kiểu dữ liệu>  [=  <giá trị mặc định>], …,[...]])  
+RETURNS  TABLE  [WITH ENCRYPTION]  
+[AS]  
+	RETURN  <Câu lệnh SQL>  
+END
+```
+**Lưu ý**  Hàm giá trị bảng đơn còn được gọi là hàm giá trị bảng nội tuyến. Có thể được dùng trong câu lệnh truy vấn thay thế cho tên bảng hoặc tên View.
+
+#### b) Hàm giá trị bảng đa câu lệnh
+```sql
+CREATE  FUNCTION  <Tên function>  ([@<tên tham số>  <kiểu dữ liệu>  [=  <giá trị mặc định>], …,[...]])  
+RETURNS @<tên biến trả về>  
+TABLE  (<tên cột 1>  <kiểu dữ liệu>  [tùy chọn thuộc tính],  ...,  <tên cột n>  <kiểu dữ liệu>  [tùy chọn thuộc tính])  [AS]  
+	BEGIN  <Câu lệnh SQL>  
+RETURN  
+END
+```
+**Ví dụ 1.**  Tạo function cho biết số lượng khách hàng theo địa chỉ bất kỳ nhận vào từ tham số với điều kiện là khách hàng có tổng số tiền vay từ trước đến nay từ 200 triệu trở lên.
+
+Cách 1: Trả về giá trị vô hướng
+```sql
+CREATE  FUNCTION count_customer_with_address (@address  varchar(200))  
+RETURNS  int
+AS  
+BEGIN  
+	DECLARE  @count  int  =  0  
+	SELECT  @count  =  count(*)  				
+	FROM  ( SELECT Vay.MaKH 
+			FROM Vay,KhachHang 
+			WHERE Vay.MaKH=KhachHang.MaKH AND KhachHang.DiaChi=  @address  
+			GROUP  BY Vay.MaKH 
+			HAVING  SUM(Vay.SoTienVay)>=200  )  
+	AS  Temp  RETURN  @count  
+END
 ```
